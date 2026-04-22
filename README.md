@@ -74,22 +74,10 @@ Auto Scaling Group
 
 ## Architecture Workflow
 
-User → Domain Endpoint → Application Load Balancer (HTTPS)
-
-Load Balancer → Routes traffic to Tomcat EC2 instances
-
-Tomcat Instances → Access backend services via Route 53 Private DNS
-
-Backend Services:
-MySQL
-Memcached
-RabbitMQ
-
-Artifacts:
-Stored in S3 and deployed to Tomcat instances
-
-Auto Scaling Group:
-Automatically scales application tier based on demand
+• Users access application load balancer endpoint. The load balancer is in a security group and only allows HTTPS traffic. Then the ALB routes the request to Tomcat instances. 
+• Apache Tomcat services run on a set of EC2 instances, which are managed by the auto scaling group. Depending on the load, the instances capacity is scaled out or scaled in. These EC2 instances (running tomcat) are in a separate security group and only allow traffic on port 8080 from the load balancer.
+• Information of backend services or backend server IP address is mentioned in Route 53 private DNS zone.
+• So, tomcat instances access backend server with a name in Route 53 private DNS where the private IP address of the backend services is mentioned. These backend EC2 instances that run MySQL, RabbitMQ, Memcache are in a separate security group. 
 
 ---
 
@@ -121,16 +109,18 @@ This approach minimizes migration complexity and speeds up cloud adoption.
 
 ## Execution Flow
 
-1. Create Key Pair for EC2 access
-2. Configure Security Groups
-3. Launch Backend EC2 Instances
-4. Configure Route 53 Private Hosted Zone
-5. Build Application Artifact Locally
-6. Upload Artifact to S3 Bucket
-7. Deploy Artifact to Tomcat Instances
-8. Configure Application Load Balancer with HTTPS
-9. Map Domain Endpoint to Load Balancer
-10. Configure Auto Scaling Group
+1. Login to AWS account.
+2. Create key pairs.
+3. Create security groups for load balancer, tomcat and backend services.
+4. Launch instances with user data (bashscripts)
+5. Update IP to name mapping in Route 53.
+6. Build application from source code (local).
+7. Upload to S3 bucket.
+8. From S3 bucket, download artifact to tomcat EC2 instance.
+9. Setup ELB with HTTPS connection through certificate from ACM (optional).
+10. Map ELB endpoint to website name in GoDaddy DNS (optional).
+11. Verify the setup.
+12. Build autoscaling group for tomcat instances.
 
 ---
 
