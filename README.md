@@ -21,6 +21,10 @@ The objective of this project is to:
 
 ---
 
+## Architecture Diagram
+
+![Architecture Diagram](screenshots/architecture.png)
+
 ## Application Architecture
 
 The application follows a multi-tier architecture:
