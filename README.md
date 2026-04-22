@@ -75,8 +75,11 @@ Auto Scaling Group
 ## Architecture Workflow
 
 • Users access application load balancer endpoint. The load balancer is in a security group and only allows HTTPS traffic. Then the ALB routes the request to Tomcat instances. 
+
 • Apache Tomcat services run on a set of EC2 instances, which are managed by the auto scaling group. Depending on the load, the instances capacity is scaled out or scaled in. These EC2 instances (running tomcat) are in a separate security group and only allow traffic on port 8080 from the load balancer.
+
 • Information of backend services or backend server IP address is mentioned in Route 53 private DNS zone.
+
 • So, tomcat instances access backend server with a name in Route 53 private DNS where the private IP address of the backend services is mentioned. These backend EC2 instances that run MySQL, RabbitMQ, Memcache are in a separate security group. 
 
 ---
