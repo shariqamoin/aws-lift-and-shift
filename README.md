@@ -23,7 +23,7 @@ The objective of this project is to:
 
 ## Architecture Diagram
 
-![Architecture Diagram](screenshots/architecture.png)
+![Architecture Diagram](architecture.png)
 
 ## Application Architecture
 
